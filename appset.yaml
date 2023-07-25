@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: primemob
+spec:
+  serviceName: my-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: primemob
+  template:
+    metadata:
+      labels:
+        app: primemob
+    spec:
+      containers:
+        - name: primemob
+          image: kubesahil221/primemob:v1
+          ports:
+            - containerPort: 8050
+          volumeMounts:
+            - name: myapp-vol
+              mountPath: /mnt
+  volumeClaimTemplates:
+    - metadata:
+        name: myapp-vol
+      spec:
+        accessModes: [ "ReadWriteOnce"]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 900Mi
